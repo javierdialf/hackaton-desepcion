@@ -11,6 +11,10 @@ export class DocenteService {
 
 
   async create(createDocenteDto: CreateDocenteDto) {
+    const newDocente = await this.DocenteRepository.create(createDocenteDto);
+    const docenteSaved =  this.DocenteRepository.save(newDocente);
+    
+    return docenteSaved;
   }
 
   async findAll():Promise<Docente[]> {

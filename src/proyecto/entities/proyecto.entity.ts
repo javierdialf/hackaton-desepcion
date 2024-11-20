@@ -3,6 +3,7 @@ import { Docente } from "../../docente/entities/docente.entity";
 import { Lider } from "../../lider/entities/lider.entity";
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn, OneToOne} from "typeorm";
 import { estado } from "../types/estado";
+import { Facultad } from "../types/facultad";
 
 @Entity()
 export class Proyecto {
@@ -17,6 +18,9 @@ export class Proyecto {
 
     @CreateDateColumn()
     TiempoInicio: Date;
+
+    @Column()
+    Facultad: Facultad;
 
     @Column({nullable: true})
     TiempoFinalizacion?: Date;

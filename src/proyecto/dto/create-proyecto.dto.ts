@@ -1,4 +1,5 @@
 import { IsDate, IsNotEmpty } from "class-validator";
+import { Facultad } from "../types/facultad";
 
 export class CreateProyectoDto {
     @IsNotEmpty()
@@ -6,6 +7,9 @@ export class CreateProyectoDto {
 
     @IsNotEmpty()
     Descripcion: string;
+
+    @IsNotEmpty()
+    Facultad: Facultad;
 
     @IsNotEmpty()
     IdLider: number;

@@ -3,7 +3,7 @@ import { CreateObjetivoDto } from './dto/create-objetivo.dto';
 import { UpdateObjetivoDto } from './dto/update-objetivo.dto';
 import { Objetivo } from './entities/objetivo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 
 @Injectable()
 export class ObjetivoService {
@@ -51,6 +51,7 @@ export class ObjetivoService {
 
  async update(idObjetivo: number, updateObjetivoDto: UpdateObjetivoDto) {
       const objetivo:Objetivo = await this.findOne(idObjetivo)
+        if (!objetivo) throw new NotFoundException();
 
         return await this.ObjetivoRepository
         .createQueryBuilder()
@@ -60,7 +61,16 @@ export class ObjetivoService {
         .execute();
    }
  
-  remove(id: number) {
-    return `This action removes a #${id} objetivo`;
+  async remove(idObjetivo: number):Promise<DeleteResult> {
+    const objetivo: Objetivo = await this.findOne(idObjetivo);
+      if (!objetivo) throw new NotFoundException();
+
+            return await this.ObjetivoRepository
+                .createQueryBuilder()
+                .delete()
+                .where({id: idObjetivo})
+                .execute();
   }
+
 }
+

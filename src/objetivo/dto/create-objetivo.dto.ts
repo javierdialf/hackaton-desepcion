@@ -2,7 +2,7 @@ import { IsNotEmpty } from "class-validator";
 
 export class CreateObjetivoDto {
     @IsNotEmpty()
-    nombreObjetivo: string;
+    NombreObjetivo: string;
 
     @IsNotEmpty()
     DescripcionObjetivo: string;

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProyectoDto } from './dto/create-proyecto.dto';
 import { UpdateProyectoDto } from './dto/update-proyecto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,12 +16,33 @@ export class ProyectoService {
     return proyectoSaved;
   }
 
-  findAll() {
-    return `This action returns all proyecto`;
+  async findAll() {
+    try {
+      const proyectos: Proyecto[] = await this.ProyectoRepository
+          .createQueryBuilder()
+          .select('proyectos')
+          .from(Proyecto, 'proyectos')
+          .getMany();
+
+          if(!proyectos) throw new NotFoundException();
+          return proyectos;
+
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} proyecto`;
+ async findOne(idProyecto: number) {
+    const proyecto = await this.ProyectoRepository
+            .createQueryBuilder()
+            .select('*')
+            .from(Proyecto, 'proyecto')
+            .where('proyecto.IdProyecto = :id', {id: idProyecto})
+            .getRawOne();
+
+        if (!proyecto) throw new NotFoundException();
+        return proyecto;
   }
 
   update(id: number, updateProyectoDto: UpdateProyectoDto) {
