@@ -7,28 +7,28 @@ import { UpdateProyectoDto } from './dto/update-proyecto.dto';
 export class ProyectoController {
   constructor(private readonly proyectoService: ProyectoService) {}
 
-      @Post('/create')
-      create(@Body() createProyectoDto: CreateProyectoDto) {
-        return this.proyectoService.create(createProyectoDto);
-      }
+  @Post()
+  create(@Body() createProyectoDto: CreateProyectoDto) {
+    return this.proyectoService.create(createProyectoDto);
+  }
 
-      @Get('/getAll')
-      findAll() {
-        return this.proyectoService.findAll();
-      }
+  @Get()
+  findAll() {
+    return this.proyectoService.findAll();
+  }
 
-      @Get('/get/:id')
-      findOne(@Param('id') id: string) {
-        return this.proyectoService.findOne(+id);
-      }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.proyectoService.findOne(+id);
+  }
 
-      @Patch(':id')
-      update(@Param('id') id: string, @Body() updateProyectoDto: UpdateProyectoDto) {
-        return this.proyectoService.update(+id, updateProyectoDto);
-      }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateProyectoDto: UpdateProyectoDto) {
+    return this.proyectoService.update(+id, updateProyectoDto);
+  }
 
-      @Delete(':id')
-      remove(@Param('id') id: string) {
-        return this.proyectoService.remove(+id);
-      }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.proyectoService.remove(+id);
+  }
 }

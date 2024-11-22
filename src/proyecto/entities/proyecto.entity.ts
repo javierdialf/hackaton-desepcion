@@ -1,38 +1,38 @@
-import { Colaborador } from "src/colaborador/entities/colaborador.entity";
-import { Docente } from "../../docente/entities/docente.entity";
-import { Lider } from "../../lider/entities/lider.entity";
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn, OneToOne} from "typeorm";
-import { estado } from "../types/estado";
-import { Facultad } from "../types/facultad";
+import { Facultad } from "../../facultad/entities/facultad.entity";
+import { Usuario } from "../../usuario/entities/usuario.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Fase } from "../types/fase";
 
 @Entity()
 export class Proyecto {
+
     @PrimaryGeneratedColumn('increment')
-    IdProyecto: number
+    idProyecto: number
 
-    @Column()
-    NombreProyecto: string;
+    @Column({length: 55})
+    nombreProyecto: string;
 
-    @Column({type: 'varchar2', length: 255})
-    Descripcion: string;
+    @Column({type: 'varchar', length: 255})
+    descripcion: string;
 
     @CreateDateColumn()
-    TiempoInicio: Date;
+    fechaInicio: Date;
 
-    @Column()
-    Facultad: Facultad;
+    @OneToOne(() => Facultad, facultad => facultad.idFacultad, { onDelete: 'NO ACTION' })
+    @JoinColumn({ name: 'IdFacultad' })
+    idFacultad: number;
 
     @Column({nullable: true})
-    TiempoFinalizacion?: Date;
+    fechaFinalizacion?: Date;
 
     @Column({default: 0})
-    Estado: estado;
+    fase: Fase;
 
-    @OneToOne(() => Lider, lider => lider.cedula, { onDelete: 'CASCADE' })
+    @OneToOne(() => Usuario, facultad => facultad.documento, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'IdLider' })
-    IdLider: number;
+    idLider: number;
 
-    @ManyToOne(() => Docente, docente => docente.cedula, { onDelete: 'NO ACTION' })
+    @OneToOne(() => Usuario, docente => docente.documento, { onDelete: 'NO ACTION' })
     @JoinColumn({ name: 'IdDocente' })
-    IdDocente: number;
+    idDocente?: number;
 }

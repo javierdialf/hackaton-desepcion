@@ -7,14 +7,14 @@ import { UpdateObjetivoDto } from './dto/update-objetivo.dto';
 export class ObjetivoController {
   constructor(private readonly objetivoService: ObjetivoService) {}
 
-  @Post('/create')
+  @Post()
   create(@Body() createObjetivoDto: CreateObjetivoDto) {
     return this.objetivoService.create(createObjetivoDto);
   }
 
   @Get()
-  findAll(id: string) {
-    return this.objetivoService.findAll(id);
+  findAll() {
+    return this.objetivoService.findAll();
   }
 
   @Get(':id')

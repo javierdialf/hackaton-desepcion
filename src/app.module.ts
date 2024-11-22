@@ -1,43 +1,47 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import {TypeOrmModule} from '@nestjs/typeorm';
-import { ObjetivoModule } from './objetivo/objetivo.module';
-import { TareaModule } from './tarea/tarea.module';
-import { DirectorModule } from './director/director.module';
-import { DocenteModule } from './docente/docente.module';
-import { ColaboradorModule } from './colaborador/colaborador.module';
-import { LiderModule } from './lider/lider.module';
-import { Proyecto } from './proyecto/entities/proyecto.entity';
+import { APP_GUARD } from '@nestjs/core';
+import { UsuarioModule } from './usuario/usuario.module';
+import { AuthModule } from './auth/auth.module';
+import { FacultadModule } from './facultad/facultad.module';
 import { ProyectoModule } from './proyecto/proyecto.module';
+import { ObjetivoModule } from './objetivo/objetivo.module';
+
 
 @Module({
-  imports: [ConfigModule.forRoot({
-    envFilePath: `.env.${process.env.NODE_ENV}`,
-  }),
-  TypeOrmModule.forRootAsync({
-    imports: [ConfigModule],
-    useFactory: (configService: ConfigService) => ({
-      type: 'oracle',
-      host: configService.get('DB_HOST'),
-      port: parseInt(configService.get('DB_PORT')),
-      username: configService.get('DB_USERNAME'),
-      password: configService.get('DB_PASSWORD'),
-      database: configService.get('DATABASE'),
-      entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  imports: [
+    ConfigModule.forRoot({
+        envFilePath: `.env.${process.env.NODE_ENV}`,
+        isGlobal: true
     }),
-    inject: [ConfigService],
-  }),
-  ObjetivoModule,
-  TareaModule,
-  DirectorModule,
-  DocenteModule,
-  ColaboradorModule,
-  LiderModule,
-  ProyectoModule
-],
-  controllers: [AppController],
-  providers: [AppService],
+    TypeOrmModule.forRootAsync({
+        imports: [ConfigModule],
+        useFactory: (configService: ConfigService) => ({
+          type: 'mysql',
+          host: configService.get('DB_HOST'),
+          port: parseInt(configService.get('DB_PORT')),
+          username: configService.get('DB_USERNAME'),
+          password: configService.get('DB_PASSWORD'),
+          database: configService.get('DATABASE'),
+          entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        }),
+        inject: [ConfigService],
+      }),
+    AuthModule,
+    UsuarioModule,
+    FacultadModule,
+    ProyectoModule,
+    ObjetivoModule
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
+  controllers: [],
 })
 export class AppModule {}
+
+
